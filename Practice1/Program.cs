@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.Tracing;
-using System.Text;
-namespace Practice1
+﻿namespace Practice1
 {
     class Program
     {
@@ -9,8 +6,7 @@ namespace Practice1
         {
             string newStr;
             char[] mass = str.ToCharArray();
-            int startPos = 0;
-            
+
             if (str.Length == 0)
             {
                 return "Неверный ввод";
@@ -19,10 +15,25 @@ namespace Practice1
             {
                 if (str.Length % 2 == 0)
                 {
-                    Array.Reverse(mass);
+                    int mid = (mass.Length + 1) / 2;
+                    char[] firstHalf = mass.Take(mid).ToArray();
+                    char[] secondHalf = mass.Skip(mid).ToArray();
+                    Array.Reverse(firstHalf);
+                    Array.Reverse(secondHalf);
+                    var final = firstHalf.Concat(secondHalf).ToArray();
+                    return new string (final);
                 }
+                else
+                {
+                    char[] revMass = new char[mass.Length];
+                    Array.Copy(mass, revMass, revMass.Length);
+                    Array.Reverse(revMass);
+                    var final = revMass.Concat(mass).ToArray();
+                    return new string(final);
+                }
+
             }
-            return new string(mass);
+
 
         }
         static void Main(string[] args)
