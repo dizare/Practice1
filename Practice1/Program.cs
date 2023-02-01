@@ -4,9 +4,7 @@
     {
         static string ChangedStr(string str)
         {
-            string newStr;
             char[] mass = str.ToCharArray();
-
             if (str.Length == 0)
             {
                 return "Неверный ввод";
@@ -31,12 +29,9 @@
                     var final = revMass.Concat(mass).ToArray();
                     return new string(final);
                 }
-
             }
-
-
         }
-        static void Main(string[] args)
+        static void Main()
         {
             string strInput;
             Console.WriteLine("Введите строку");
@@ -44,6 +39,10 @@
             Console.WriteLine();
             strInput = ChangedStr(strInput);
             Console.WriteLine(strInput);
+            Console.WriteLine("Ввести новую строку? 1 - Да, 2 - нет");
+            int a = Convert.ToInt32(Console.ReadLine());
+            if (a == 1) Main();
+            else return;
         }
     }
 }
