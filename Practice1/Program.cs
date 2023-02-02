@@ -7,30 +7,23 @@ namespace Practice1
         static string ChangedStr(string str)
         {
             char[] mass = str.ToCharArray();
-            if (str.Length == 0)
+            if (str.Length % 2 == 0)
             {
-                return "Неверный ввод";
+                int mid = (mass.Length + 1) / 2;
+                char[] firstHalf = mass.Take(mid).ToArray();
+                char[] secondHalf = mass.Skip(mid).ToArray();
+                Array.Reverse(firstHalf);
+                Array.Reverse(secondHalf);
+                var final = firstHalf.Concat(secondHalf).ToArray();
+                return new string(final);
             }
             else
             {
-                if (str.Length % 2 == 0)
-                {
-                    int mid = (mass.Length + 1) / 2;
-                    char[] firstHalf = mass.Take(mid).ToArray();
-                    char[] secondHalf = mass.Skip(mid).ToArray();
-                    Array.Reverse(firstHalf);
-                    Array.Reverse(secondHalf);
-                    var final = firstHalf.Concat(secondHalf).ToArray();
-                    return new string (final);
-                }
-                else
-                {
-                    char[] revMass = new char[mass.Length];
-                    Array.Copy(mass, revMass, revMass.Length);
-                    Array.Reverse(revMass);
-                    var final = revMass.Concat(mass).ToArray();
-                    return new string(final);
-                }
+                char[] revMass = new char[mass.Length];
+                Array.Copy(mass, revMass, revMass.Length);
+                Array.Reverse(revMass);
+                var final = revMass.Concat(mass).ToArray();
+                return new string(final);
             }
         }
         static void Main()
@@ -38,13 +31,18 @@ namespace Practice1
             string strInput;
             Console.WriteLine("Введите строку");
             strInput = Console.ReadLine();
+            if (strInput.Length == 0)
+            {
+                Console.WriteLine("Ошибка ввода");
+                goto Reguest;
+            }
             if (Regex.IsMatch(strInput, "^[a-z]*$"))
             {
                 Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Ошибка ввода");
+                Console.WriteLine("Ошибка ввода\nНеверные символы:");
                 for (int i = 0; i < strInput.Length; i++)
                 {
                     Regex r = new Regex("[a-z]");
@@ -59,7 +57,7 @@ namespace Practice1
             }
             strInput = ChangedStr(strInput);
             Console.WriteLine(strInput);
-            Reguest:
+        Reguest:
             Console.WriteLine("Ввести новую строку? 1 - Да, 2 - нет");
             int a = Convert.ToInt32(Console.ReadLine());
             if (a == 1) Main();
