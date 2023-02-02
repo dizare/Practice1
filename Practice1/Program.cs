@@ -7,15 +7,6 @@ namespace Practice1
         static string ChangedStr(string str)
         {
             char[] mass = str.ToCharArray();
-            for (int i = 0; i < mass.Length; i++)
-            {
-                if (char.IsUpper(mass[i]) == true)
-                {
-                    Console.WriteLine(mass[i]);
-                }
-                continue;
-                
-            }
             if (str.Length == 0)
             {
                 return "Неверный ввод";
@@ -47,13 +38,21 @@ namespace Practice1
             string strInput;
             Console.WriteLine("Введите строку");
             strInput = Console.ReadLine();
-            if (Regex.IsMatch(strInput, "^[a-zA-Z0-9]*$"))
+            if (Regex.IsMatch(strInput, "^[a-z]*$"))
             {
                 Console.WriteLine();
             }
             else
             {
                 Console.WriteLine("Ошибка ввода");
+                for (int i = 0; i < strInput.Length; i++)
+                {
+                    if (char.IsUpper(strInput[i]) == true || char.IsDigit(strInput[i]) == true)
+                    {
+                        Console.WriteLine(strInput[i]);
+                        continue;
+                    }
+                }
                 goto Reguest;
             }
             strInput = ChangedStr(strInput);
