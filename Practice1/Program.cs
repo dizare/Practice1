@@ -1,10 +1,21 @@
-﻿namespace Practice1
+﻿using System.Text.RegularExpressions;
+
+namespace Practice1
 {
     class Program
     {
         static string ChangedStr(string str)
         {
             char[] mass = str.ToCharArray();
+            for (int i = 0; i < mass.Length; i++)
+            {
+                if (char.IsUpper(mass[i]) == true)
+                {
+                    Console.WriteLine(mass[i]);
+                }
+                continue;
+                
+            }
             if (str.Length == 0)
             {
                 return "Неверный ввод";
@@ -36,9 +47,18 @@
             string strInput;
             Console.WriteLine("Введите строку");
             strInput = Console.ReadLine();
-            Console.WriteLine();
+            if (Regex.IsMatch(strInput, "^[a-zA-Z0-9]*$"))
+            {
+                Console.WriteLine();
+            }
+            else
+            {
+                Console.WriteLine("Ошибка ввода");
+                goto Reguest;
+            }
             strInput = ChangedStr(strInput);
             Console.WriteLine(strInput);
+            Reguest:
             Console.WriteLine("Ввести новую строку? 1 - Да, 2 - нет");
             int a = Convert.ToInt32(Console.ReadLine());
             if (a == 1) Main();
