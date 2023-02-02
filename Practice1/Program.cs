@@ -47,11 +47,13 @@ namespace Practice1
                 Console.WriteLine("Ошибка ввода");
                 for (int i = 0; i < strInput.Length; i++)
                 {
-                    if (char.IsUpper(strInput[i]) == true || char.IsDigit(strInput[i]) == true)
+                    Regex r = new Regex("[a-z]");
+                    if (r.IsMatch(strInput, i) == false || char.IsUpper(strInput[i]) == true || char.IsDigit(strInput[i]) == true)
                     {
                         Console.WriteLine(strInput[i]);
                         continue;
                     }
+
                 }
                 goto Reguest;
             }
