@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-
 namespace Practice1
 {
     class Program
@@ -57,7 +56,7 @@ namespace Practice1
             }
             strInput = ChangedStr(strInput);
             Console.WriteLine(strInput);
-        Reguest:
+            Reguest:
             Console.WriteLine("Ввести новую строку? 1 - Да, 2 - нет");
             int a = Convert.ToInt32(Console.ReadLine());
             if (a == 1) Main();
