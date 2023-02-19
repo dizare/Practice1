@@ -13,6 +13,7 @@ namespace Practice1
             string strResult = ChangedStr(strInput);
             Console.WriteLine(strResult);
             NumOfReplays(strResult);
+            SubString(strResult);
         }
         static string ChangedStr(string str)
         {
@@ -63,6 +64,18 @@ namespace Practice1
                 Predicate<char> removableSymbol = enumSymbols => enumSymbols == symbol;
                 int numDelSymbols = tmp.RemoveAll(removableSymbol);
                 if (numDelSymbols != 0) Console.WriteLine(symbol + " = " + numDelSymbols);
+            }
+        }
+        static void SubString(string str)
+        {
+            char[] tmp = str.ToCharArray();
+            Regex r = new Regex("^[aeiou]*$");
+            Predicate<char> indexSymbol = e => r.IsMatch(e.ToString());
+            int start = Array.FindIndex(tmp, indexSymbol);
+            int end = Array.FindLastIndex(tmp, indexSymbol);
+            for (int i = start; i <= end; i++)
+            {
+                Console.Write(tmp[i].ToString());
             }
         }
     }
