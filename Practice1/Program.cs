@@ -3,6 +3,17 @@ namespace Practice1
 {
     class Program
     {
+        static void Main()
+        {
+            Console.WriteLine("Введите строку");
+            string strInput = Console.ReadLine();
+
+            if (!CheckString(strInput)) return;
+
+            string strResult = ChangedStr(strInput);
+            Console.WriteLine(strResult);
+            NumOfReplays(strResult);
+        }
         static string ChangedStr(string str)
         {
             char[] mass = str.ToCharArray();
@@ -13,54 +24,49 @@ namespace Practice1
                 char[] secondHalf = mass.Skip(mid).ToArray();
                 Array.Reverse(firstHalf);
                 Array.Reverse(secondHalf);
-                var final = firstHalf.Concat(secondHalf).ToArray();
-                return new string(final);
+                return new string(firstHalf) + new string(secondHalf);
             }
             else
             {
-                char[] revMass = new char[mass.Length];
-                Array.Copy(mass, revMass, revMass.Length);
-                Array.Reverse(revMass);
-                var final = revMass.Concat(mass).ToArray();
-                return new string(final);
+                Array.Reverse(mass);
+                return new string(mass) + str;
             }
         }
-        static void Main()
+        static bool CheckString(string str)
         {
-            string strInput;
-            Console.WriteLine("Введите строку");
-            strInput = Console.ReadLine();
-            if (strInput.Length == 0)
+            if (str.Length == 0)
             {
-                Console.WriteLine("Ошибка ввода");
-                goto Reguest;
+                Console.WriteLine("Не введены символы");
+                return false;
             }
-            if (Regex.IsMatch(strInput, "^[a-z]*$"))
-            {
-                Console.WriteLine();
-            }
-            else
+            if (!Regex.IsMatch(str, "^[a-z]*$"))
             {
                 Console.WriteLine("Ошибка ввода\nНеверные символы:");
-                for (int i = 0; i < strInput.Length; i++)
+                Regex r = new Regex("[a-z]");
+                char[] mass = str.ToCharArray();
+                char[] result = mass.Distinct().ToArray(); //удаление дубликатов неверных символов
+                for (int i = 0; i < result.Length; i++)
                 {
-                    Regex r = new Regex("[a-z]");
-                    if (r.IsMatch(strInput, i) == false || char.IsUpper(strInput[i]) == true || char.IsDigit(strInput[i]) == true)
-                    {
-                        Console.WriteLine(strInput[i]);
-                        continue;
-                    }
 
+                    if (!r.IsMatch(result[i].ToString()) || char.IsUpper(result[i]) || char.IsDigit(result[i]))
+                    {
+                        Console.Write(result[i]);
+                    }
                 }
-                goto Reguest;
+                return false;
             }
-            strInput = ChangedStr(strInput);
-            Console.WriteLine(strInput);
-            Reguest:
-            Console.WriteLine("Ввести новую строку? 1 - Да, 2 - нет");
-            int a = Convert.ToInt32(Console.ReadLine());
-            if (a == 1) Main();
-            else return;
+            return true;
+        }
+        static void NumOfReplays(string str)
+        {
+            Console.WriteLine("Каждый символ входил в строку: ");
+            List<char> tmp = new List<char>(str);
+            foreach (var symbol in str.ToCharArray())
+            {
+                Predicate<char> removableSymbol = enumSymbols => enumSymbols == symbol;
+                int numDelSymbols = tmp.RemoveAll(removableSymbol);
+                if (numDelSymbols != 0) Console.WriteLine(symbol + " = " + numDelSymbols);
+            }
         }
     }
 }
