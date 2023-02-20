@@ -43,11 +43,14 @@ namespace Practice1
             {
                 Console.WriteLine("Ошибка ввода\nНеверные символы:");
                 Regex r = new Regex("[a-z]");
-                for (int i = 0; i < str.Length; i++)
+                char[] mass = str.ToCharArray();
+                char[] result = mass.Distinct().ToArray(); //удаление дубликатов неверных символов
+                for (int i = 0; i < result.Length; i++)
                 {
-                    if (!r.IsMatch(str[i].ToString()) || char.IsUpper(str[i]) || char.IsDigit(str[i]))
+
+                    if (!r.IsMatch(result[i].ToString()) || char.IsUpper(result[i]) || char.IsDigit(result[i]))
                     {
-                        Console.Write(str[i]);
+                        Console.Write(result[i]);
                     }
                 }
                 return false;
