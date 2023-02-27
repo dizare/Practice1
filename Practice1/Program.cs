@@ -70,16 +70,21 @@ namespace Practice1
         }
         static void SubString(string str)
         {
-            char[] tmp = str.ToCharArray();
             Regex r = new Regex("^[aeiou]*$");
+            char[] tmp = str.ToCharArray();
             Predicate<char> indexSymbol = e => r.IsMatch(e.ToString());
-            int start = Array.FindIndex(tmp, indexSymbol);
-            int end = Array.FindLastIndex(tmp, indexSymbol);
-            Console.WriteLine("Самая длинная подстрока начинающаяся и заканчивающаяся на гласную:");
-            for (int i = start; i <= end; i++)
+            if (Array.Exists(tmp, indexSymbol))
             {
-                Console.Write(tmp[i].ToString());
+                int start = Array.FindIndex(tmp, indexSymbol);
+                int end = Array.FindLastIndex(tmp, indexSymbol);
+                Console.WriteLine("Самая длинная подстрока начинающаяся и заканчивающаяся на гласную:");
+                for (int i = start; i <= end; i++)
+                {
+                    Console.Write(tmp[i].ToString());
+                }
             }
+            else Console.WriteLine("Подстроки начинающаяся и заканчивающаяся на гласную не существует");
         }
+        
     }
 }
