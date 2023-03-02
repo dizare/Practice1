@@ -84,6 +84,7 @@ namespace Practice1
                 }
             }
             else Console.WriteLine("Подстроки начинающаяся и заканчивающаяся на гласную не существует");
+            }
         }
         
     }
