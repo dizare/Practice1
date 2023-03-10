@@ -13,6 +13,7 @@ namespace Practice1
             string strResult = ChangedStr(strInput);
             Console.WriteLine(strResult);
             NumOfReplays(strResult);
+            SubString(strResult);
         }
         static string ChangedStr(string str)
         {
@@ -47,7 +48,6 @@ namespace Practice1
                 char[] result = mass.Distinct().ToArray(); //удаление дубликатов неверных символов
                 for (int i = 0; i < result.Length; i++)
                 {
-
                     if (!r.IsMatch(result[i].ToString()) || char.IsUpper(result[i]) || char.IsDigit(result[i]))
                     {
                         Console.Write(result[i]);
@@ -68,5 +68,24 @@ namespace Practice1
                 if (numDelSymbols != 0) Console.WriteLine(symbol + " = " + numDelSymbols);
             }
         }
+        static void SubString(string str)
+        {
+            Regex r = new Regex("^[aeiou]*$");
+            char[] tmp = str.ToCharArray();
+            Predicate<char> indexSymbol = e => r.IsMatch(e.ToString());
+            if (Array.Exists(tmp, indexSymbol))
+            {
+                int start = Array.FindIndex(tmp, indexSymbol);
+                int end = Array.FindLastIndex(tmp, indexSymbol);
+                Console.WriteLine("Самая длинная подстрока начинающаяся и заканчивающаяся на гласную:");
+                for (int i = start; i <= end; i++)
+                {
+                    Console.Write(tmp[i].ToString());
+                }
+            }
+            else Console.WriteLine("Подстроки начинающаяся и заканчивающаяся на гласную не существует");
+            }
+        }
+        
     }
 }
