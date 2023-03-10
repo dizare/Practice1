@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 namespace Practice1
 {
     class Program
@@ -14,8 +14,8 @@ namespace Practice1
             Console.WriteLine(strResult);
             NumOfReplays(strResult);
             SubString(strResult);
-
             Console.WriteLine("\nВыберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
+            Console.WriteLine("Выберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
             string choice = Console.ReadLine().ToUpper();
             if (choice == "Q")
             {
