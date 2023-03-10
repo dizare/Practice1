@@ -15,7 +15,7 @@ namespace Practice1
             NumOfReplays(strResult);
             SubString(strResult);
 
-            Console.WriteLine("Выберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
+            Console.WriteLine("\nВыберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
             string choice = Console.ReadLine().ToUpper();
             if (choice == "Q")
             {
@@ -27,6 +27,10 @@ namespace Practice1
                 Console.WriteLine("\nРезультат сортировки TreeSort: ");
                 Console.WriteLine(Sort.TreeSort(strResult));
             }
+
+            var deleteSymbol = WebRandom(strResult);
+            Console.WriteLine("Урезанная обработанная строка: {0}, случайное число - {1}, удалён символ - {2}", strResult.Remove(deleteSymbol, 1), deleteSymbol + 1, strResult[deleteSymbol]);
+
             static string ChangedStr(string str)
             {
                 char[] mass = str.ToCharArray();
@@ -96,6 +100,22 @@ namespace Practice1
                     }
                 }
                 else Console.WriteLine("Подстроки начинающаяся и заканчивающаяся на гласную не существует");
+            }
+            static int WebRandom(string str)
+            {
+                int ranNum;
+                var client = new HttpClient();
+                string strUrl = "http://www.randomnumberapi.com/api/v1.0/random?max=" + (str.Length - 1) + "&count=1";
+                try
+                {
+                    var res = client.GetAsync(new Uri(strUrl)).Result.Content.ReadAsStringAsync().Result;
+                    ranNum = Convert.ToInt32(res[1].ToString());
+                }
+                catch (Exception ex)
+                {
+                    ranNum = new Random().Next(str.Length);
+                }
+                return ranNum;
             }
         }
     }
