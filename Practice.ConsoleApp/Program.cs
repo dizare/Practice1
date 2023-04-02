@@ -1,10 +1,14 @@
+﻿using System.Text;
 using System.Text.RegularExpressions;
-namespace Practice1
+using Practice1.Core;
+
+namespace Pratice1.ConsoleApp
 {
-    class Program
+    internal class Program
     {
         static void Main()
         {
+            Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine("Введите строку");
             string strInput = Console.ReadLine();
 
@@ -14,8 +18,8 @@ namespace Practice1
             Console.WriteLine(strResult);
             NumOfReplays(strResult);
             SubString(strResult);
+
             Console.WriteLine("\nВыберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
-            Console.WriteLine("Выберите метод сортировки обработанной строки: \nQ - Быстрая сортировка, T - Сортировка деревом");
             string choice = Console.ReadLine().ToUpper();
             if (choice == "Q")
             {
