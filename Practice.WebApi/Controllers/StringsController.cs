@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using NuGet.Configuration;
 using Practice.Core;
 using Practice1.Core;
+using System.Collections.Generic;
 
 namespace Practice.WebApi.Controllers;
 
@@ -10,16 +13,18 @@ namespace Practice.WebApi.Controllers;
 public class StringsController : ControllerBase
 {
     private readonly HttpClient _httpClient;
+    private readonly IConfiguration configuration;
 
-    public StringsController(HttpClient httpClient)
+    public StringsController(HttpClient httpClient, IConfiguration configuration)
     {
         _httpClient = httpClient;
+        this.configuration = configuration;
     }
-
 
     [HttpGet]
     public async Task<IActionResult> ProceedString(string inputString, [FromQuery] SortingModel sorting)
     {
+        AppSettings settings = AppSettings.Load();
         if (!StringHelper.ValidateString(inputString, out var invalidChars))
         {
             return BadRequest(new
@@ -27,6 +32,20 @@ public class StringsController : ControllerBase
                 message = "Были введены неподходящие символы",
                 badCharacters = invalidChars.Select(x => x)
             });
+        }
+        List<string> blacklistWordsFound = new List<string>();
+        foreach (string blacklistedWord in settings.Settings.Blacklist)
+        {
+            if (inputString.Contains(blacklistedWord))
+            {
+                blacklistWordsFound.Add(blacklistedWord);
+            }
+        }
+
+        if (blacklistWordsFound.Count > 0)
+        {
+            string errorMessage = $"Используются слова из Blacklist: {string.Join(", ", blacklistWordsFound)}";
+            return BadRequest(errorMessage);
         }
 
         var halfLengthLine = inputString.Length / 2;
@@ -57,8 +76,7 @@ public class StringsController : ControllerBase
 
     private async Task<int> GetRandomNumberByApi(int stringLength)
     {
-        var url =
-            $"https://www.random.org/integers/?num=1&min=0&max={stringLength - 1}&col=1&base=10&format=plain&rnd=new";
+        var url = configuration.GetValue<string>("RandomAPI");
         var response = await _httpClient.GetAsync(url);
         var responseBody = await response.Content.ReadAsStringAsync();
         return int.Parse(responseBody);
