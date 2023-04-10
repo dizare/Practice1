@@ -14,6 +14,7 @@ public class StringsController : ControllerBase
 {
     private readonly HttpClient _httpClient;
     private readonly IConfiguration configuration;
+    private static SemaphoreSlim semaphore = new SemaphoreSlim(1);
 
     public StringsController(HttpClient httpClient, IConfiguration configuration)
     {
@@ -25,6 +26,13 @@ public class StringsController : ControllerBase
     public async Task<IActionResult> ProceedString(string inputString, [FromQuery] SortingModel sorting)
     {
         AppSettings settings = AppSettings.Load();
+        if (semaphore.CurrentCount >= settings.Settings.ParallelLimit)
+        {
+            return StatusCode(503, "Service Unavailable");
+        }
+
+        await semaphore.WaitAsync();
+
         if (!StringHelper.ValidateString(inputString, out var invalidChars))
         {
             return BadRequest(new
@@ -63,7 +71,7 @@ public class StringsController : ControllerBase
 
         var stringWithRemovedIndex = await RemoveRandomChar(reversedString);
 
-
+        semaphore.Release();
         return Ok(new
         {
             proceededString = reversedString,

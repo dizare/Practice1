@@ -5,6 +5,7 @@ namespace Practice.WebApi
     public class Settings
     {
         public string[] Blacklist { get; set; }
+        public int ParallelLimit { get; set; }
     }
 
     public class AppSettings
