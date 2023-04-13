@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Configuration;
-using Practice.Core;
 using Practice1.Core;
 using System.Collections.Generic;
 
@@ -36,7 +35,7 @@ public class StringsController : ControllerBase
         List<string> blacklistWordsFound = new List<string>();
         foreach (string blacklistedWord in settings.Settings.Blacklist)
         {
-            if (inputString.Contains(blacklistedWord))
+            if (inputString.Equals(blacklistedWord))
             {
                 blacklistWordsFound.Add(blacklistedWord);
             }
@@ -81,7 +80,6 @@ public class StringsController : ControllerBase
         var responseBody = await response.Content.ReadAsStringAsync();
         return int.Parse(responseBody);
     }
-
 
     private async Task<string> RemoveRandomChar(string inputString)
     {
