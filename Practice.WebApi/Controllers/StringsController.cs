@@ -44,7 +44,7 @@ public class StringsController : ControllerBase
         List<string> blacklistWordsFound = new List<string>();
         foreach (string blacklistedWord in settings.Settings.Blacklist)
         {
-            if (inputString.Contains(blacklistedWord))
+            if (inputString.Equals(blacklistedWord))
             {
                 blacklistWordsFound.Add(blacklistedWord);
             }
