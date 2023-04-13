@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Practice1
+namespace Practice1.Core
 {
-    internal static class Sort
+    public static class Sort
     {
         //QuickSort==========================================================
         //метод обмена элементами массива
