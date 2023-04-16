@@ -33,55 +33,62 @@ public class StringsController : ControllerBase
 
         await semaphore.WaitAsync();
 
-        if (!StringHelper.ValidateString(inputString, out var invalidChars))
+        try
         {
-            return BadRequest(new
+            if (!StringHelper.ValidateString(inputString, out var invalidChars))
             {
-                message = "Были введены неподходящие символы",
-                badCharacters = invalidChars.Select(x => x)
+                return BadRequest(new
+                {
+                    message = "Были введены неподходящие символы",
+                    badCharacters = invalidChars.Select(x => x)
+                });
+            }
+            List<string> blacklistWordsFound = new List<string>();
+            foreach (string blacklistedWord in settings.Settings.Blacklist)
+            {
+                if (inputString.Equals(blacklistedWord))
+                {
+                    blacklistWordsFound.Add(blacklistedWord);
+                }
+            }
+
+            if (blacklistWordsFound.Count > 0)
+            {
+                string errorMessage = $"Используются слова из Blacklist: {string.Join(", ", blacklistWordsFound)}";
+                return BadRequest(errorMessage);
+            }
+
+            var halfLengthLine = inputString.Length / 2;
+            var reversedString = inputString.Length % 2 == 0
+                ? StringHelper.ReverseString(inputString.Substring(0, halfLengthLine)) +
+                  StringHelper.ReverseString(inputString.Substring(halfLengthLine))
+                : StringHelper.ReverseString(inputString) + inputString;
+
+
+
+            object sortedProceededString = sorting.Sorting switch
+            {
+                SortingEnum.Quick => Sort.QuickSort(reversedString),
+                SortingEnum.Tree => Sort.TreeSort(reversedString),
+                _ => string.Empty
+            };
+
+            var stringWithRemovedIndex = await RemoveRandomChar(reversedString);
+
+            return Ok(new
+            {
+                proceededString = reversedString,
+                countCharacters = StringHelper.CountRepeatedCharacters(reversedString),
+                longestVowelSubstring = StringHelper.FindLongestVowelSubstring(reversedString),
+                sortedString = sortedProceededString,
+                stringWithRemovedChar = stringWithRemovedIndex
             });
         }
-        List<string> blacklistWordsFound = new List<string>();
-        foreach (string blacklistedWord in settings.Settings.Blacklist)
+        finally
         {
-            if (inputString.Equals(blacklistedWord))
-            {
-                blacklistWordsFound.Add(blacklistedWord);
-            }
+            semaphore.Release();
         }
-
-        if (blacklistWordsFound.Count > 0)
-        {
-            string errorMessage = $"Используются слова из Blacklist: {string.Join(", ", blacklistWordsFound)}";
-            return BadRequest(errorMessage);
-        }
-
-        var halfLengthLine = inputString.Length / 2;
-        var reversedString = inputString.Length % 2 == 0
-            ? StringHelper.ReverseString(inputString.Substring(0, halfLengthLine)) +
-              StringHelper.ReverseString(inputString.Substring(halfLengthLine))
-            : StringHelper.ReverseString(inputString) + inputString;
-
-        object sortedProceededString = sorting.Sorting switch
-        {
-            SortingEnum.Quick => Sort.QuickSort(reversedString),
-            SortingEnum.Tree => Sort.TreeSort(reversedString),
-            _ => string.Empty
-        };
-
-        var stringWithRemovedIndex = await RemoveRandomChar(reversedString);
-
-        semaphore.Release();
-        return Ok(new
-        {
-            proceededString = reversedString,
-            countCharacters = StringHelper.CountRepeatedCharacters(reversedString),
-            longestVowelSubstring = StringHelper.FindLongestVowelSubstring(reversedString),
-            sortedString = sortedProceededString,
-            stringWithRemovedChar = stringWithRemovedIndex
-        });
     }
-
     private async Task<int> GetRandomNumberByApi(int stringLength)
     {
         var url = configuration.GetValue<string>("RandomAPI");
@@ -89,7 +96,6 @@ public class StringsController : ControllerBase
         var responseBody = await response.Content.ReadAsStringAsync();
         return int.Parse(responseBody);
     }
-
 
     private async Task<string> RemoveRandomChar(string inputString)
     {
