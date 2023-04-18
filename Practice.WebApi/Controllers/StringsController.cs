@@ -58,13 +58,7 @@ public class StringsController : ControllerBase
                 return BadRequest(errorMessage);
             }
 
-            var halfLengthLine = inputString.Length / 2;
-            var reversedString = inputString.Length % 2 == 0
-                ? StringHelper.ReverseString(inputString.Substring(0, halfLengthLine)) +
-                  StringHelper.ReverseString(inputString.Substring(halfLengthLine))
-                : StringHelper.ReverseString(inputString) + inputString;
-
-
+            var reversedString = StringHelper.ReverseProcess(inputString);
 
             object sortedProceededString = sorting.Sorting switch
             {
