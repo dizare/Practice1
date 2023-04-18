@@ -1,4 +1,7 @@
-﻿using System.Text.RegularExpressions;
+﻿using Practice1.Core;
+using System;
+using System.Text.RegularExpressions;
+
 
 namespace Practice.Core;
 
@@ -9,6 +12,16 @@ public class StringHelper
         var arrayLine = inputString.ToArray();
         Array.Reverse(arrayLine);
         return new string(arrayLine);
+    }
+
+    public static string ReverseProcess(string inputString)
+    {
+        var halfLengthLine = inputString.Length / 2;
+        var reversedString = inputString.Length % 2 == 0
+            ? ReverseString(inputString.Substring(0, halfLengthLine)) +
+              ReverseString(inputString.Substring(halfLengthLine))
+            : ReverseString(inputString) + inputString;
+        return reversedString;
     }
 
     public static string FindLongestVowelSubstring(string inputString)
@@ -61,7 +74,6 @@ public class StringHelper
                 characterCount.Add(c, 1);
             }
         }
-
         return characterCount;
     }
 }
