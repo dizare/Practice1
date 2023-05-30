@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using NuGet.Configuration;
+using Practice.Core;
 using Practice1.Core;
 using System.Collections.Generic;
 
@@ -42,6 +43,7 @@ public class StringsController : ControllerBase
                     badCharacters = invalidChars.Select(x => x)
                 });
             }
+
             List<string> blacklistWordsFound = new List<string>();
             foreach (string blacklistedWord in settings.Settings.Blacklist)
             {
@@ -57,13 +59,7 @@ public class StringsController : ControllerBase
                 return BadRequest(errorMessage);
             }
 
-            var halfLengthLine = inputString.Length / 2;
-            var reversedString = inputString.Length % 2 == 0
-                ? StringHelper.ReverseString(inputString.Substring(0, halfLengthLine)) +
-                  StringHelper.ReverseString(inputString.Substring(halfLengthLine))
-                : StringHelper.ReverseString(inputString) + inputString;
-
-
+            var reversedString = StringHelper.ReverseProcess(inputString);
 
             object sortedProceededString = sorting.Sorting switch
             {
@@ -83,6 +79,7 @@ public class StringsController : ControllerBase
                 stringWithRemovedChar = stringWithRemovedIndex
             });
         }
+        
         finally
         {
             semaphore.Release();
