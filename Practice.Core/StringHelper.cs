@@ -1,4 +1,4 @@
-﻿using Practice1.Core;
+using Practice1.Core;
 using System;
 using System.Text.RegularExpressions;
 

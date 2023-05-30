@@ -43,6 +43,7 @@ public class StringsController : ControllerBase
                     badCharacters = invalidChars.Select(x => x)
                 });
             }
+
             List<string> blacklistWordsFound = new List<string>();
             foreach (string blacklistedWord in settings.Settings.Blacklist)
             {
@@ -78,6 +79,7 @@ public class StringsController : ControllerBase
                 stringWithRemovedChar = stringWithRemovedIndex
             });
         }
+        
         finally
         {
             semaphore.Release();
